@@ -3,6 +3,8 @@ const bodyParser = require("body-parser");
 const snarkjs = require("snarkjs");
 const fs = require("fs");
 
+console.log("WASM exists:", fs.existsSync(wasmPath));
+console.log("ZKEY exists:", fs.existsSync(zkeyPath));
 const app = express();
 app.use(bodyParser.json());
 
