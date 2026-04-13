@@ -1,74 +1,100 @@
-# Vyntra V1 — Zero Knowledge Age Verification
+# Vyntra 
 
-## Overview
-Vyntra V1 is a prototype that demonstrates privacy-preserving age verification using Zero-Knowledge Proofs (ZKPs). It verifies whether a user is 16 or older without revealing their actual age.
+Vyntra is a Zero-Knowledge Proof (ZKP) based age verification system that allows users to prove they meet an age requirement without revealing their actual age.
 
-## Problem
-Most systems require users to share sensitive personal data (like date of birth or ID) just to prove something simple like age eligibility. This creates unnecessary privacy risks and data exposure.
+---
 
-## Solution
-Vyntra uses Zero-Knowledge Proofs to allow a user to prove:
-"I am 16 or older"
-without revealing the actual age.
+## Live Demo
+
+https://vyntra-4rae.onrender.com
+
+---
+
+## What It Does
+
+- Takes a user's age as input  
+- Generates a Zero-Knowledge Proof using Circom + snarkjs  
+- Verifies whether the user meets the required age threshold (e.g. 16+)  
+- Returns a proof without exposing the original input  
+
+---
+
+## Tech Stack
+
+- Circom – ZK circuit definition  
+- snarkjs – Proof generation (Groth16)  
+- Node.js (Express) – Backend API  
+- HTML + JavaScript – Frontend  
+- Render – Deployment  
+
+---
+
+## 📂 Project Structure
+
+vyntra/
+
+
+---
 
 ## How It Works
-1. User enters their age in the frontend
-2. Backend generates a ZK proof using a Circom circuit
-3. Proof is verified using SnarkJS
-4. Server returns a verification result:
-   - Verified (age ≥ 16)
-   - Not verified (age < 16)
 
-## Architecture
-- Frontend: HTML, CSS, JavaScript
-- Backend: Node.js (Express server)
-- ZK Circuit: Circom
-- Proof System: SnarkJS (Groth16)
+1. User enters age in the frontend  
+2. Frontend sends request to /prove-age  
+3. Backend:
+   - Runs snarkjs.groth16.fullProve  
+   - Generates proof using .wasm + .zkey  
+4. Returns:
+   - proof  
+   - publicSignals  
+   - verified: true/false  
 
-## Project Flow
-Frontend → sends age → Backend → generates proof → verifies proof → returns result
+---
 
-## How to Run
+##  Example Response
 
-### Install dependencies
-```bash
-npm install
-```
+{
+  "success": true,
+  "verified": true,
+  "proof": { ... },
+  "publicSignals": ["1"]
+}
 
-### Start server
-```bash
-node server.js
-```
+---
 
-### Open in browser
-http://localhost:3000
+## Current Limitations
 
-## Expected Output
-Input: 15 → Not Verified  
-Input: 16 → Verified
+- Proof is generated server-side (not fully trustless)  
+- User input is not yet cryptographically committed  
+- No external proof verification endpoint  
+- Designed as a prototype/demo  
 
-## Files Included
-- server.js — backend API handling proof generation and verification
-- clean.circom — ZK circuit logic
-- build/ — compiled circuit artifacts
-- public/ — frontend UI
-- verification_key.json — verification key
-- circuit_final.zkey — trusted setup artifact
+---
 
-## Limitations (V1)
-- Local prototype only
-- Simplified age check circuit
-- No identity binding
-- No Polygon ID integration
+##  Run Locally
 
-## Future Work
-- Polygon ID integration
-- Decentralized identity graph
-- Token-based verification incentives
-- Production deployment
+1. Install dependencies  
+npm install  
 
-## Demo
-(Add your demo video link here)
+2. Compile circuit  
+circom clean.circom --r1cs --wasm --sym -l node_modules  
+
+3. Setup proving key  
+snarkjs groth16 setup clean.r1cs pot12_final.ptau circuit_0000.zkey  
+snarkjs zkey contribute circuit_0000.zkey circuit_final.zkey --name="1" -v  
+
+4. Start server  
+node server.js  
+
+---
+
+## Future Improvements
+
+- Client-side proof generation  
+- On-chain verification 
+- Identity commitments instead of raw age  
+- API for third-party integrations  
+
 
 ## Author
-Vyntra V1 Prototype
+
+Manushri Patil
