@@ -1,0 +1,4 @@
+01/03/26
+I am building this because I want zero-knowledge proofs to be the universal method of verification of age and identity-with mathematical proof instead of uploading IDs or passports.
+I do not want the tech giants to own every user's data on the internet. I want each and every user to own their data instead of risking it to be stolen, or sold, or hacked into. 
+I don't want the websites to own user's accounts. If the website shuts down, then the accounts should be easily transferrable to another platform. Same thing if the platform removes the user, or the user leaves the platform.
