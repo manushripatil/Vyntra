@@ -2,98 +2,91 @@ const express = require("express");
 const cors = require("cors");
 const fs = require("fs");
 const path = require("path");
+const snarkjs = require("snarkjs");
 
 const app = express();
 app.use(cors());
 app.use(express.json());
 
 // ==============================
-// PATHS (FIXED - NO MORE CRASHES)
+// PATHS
 // ==============================
 const wasmPath = path.join(__dirname, "clean_js", "clean.wasm");
 const zkeyPath = path.join(__dirname, "circuit_final.zkey");
 
-// ==============================
-// DEBUG CHECK (IMPORTANT ON RENDER)
-// ==============================
-console.log("===== VYNTRA SERVER BOOT =====");
-console.log("__dirname:", __dirname);
-console.log("WASM exists:", fs.existsSync(wasmPath));
-console.log("ZKEY exists:", fs.existsSync(zkeyPath));
-
-if (fs.existsSync(__dirname)) {
-  console.log("FILES:", fs.readdirSync(__dirname));
-}
+// input.json temp file (snarkjs needs this style)
+const inputPath = path.join(__dirname, "input.json");
 
 // ==============================
-// ROOT ROUTE
+// DEBUG
 // ==============================
-app.get("/", (req, res) => {
-  res.send("Vyntra API Running 🚀");
-});
+console.log("ZK SERVER BOOTED");
+console.log("WASM:", fs.existsSync(wasmPath));
+console.log("ZKEY:", fs.existsSync(zkeyPath));
 
 // ==============================
-// AGE PROOF ENDPOINT
+// ROUTE
 // ==============================
 app.post("/prove-age", async (req, res) => {
   try {
     const { age } = req.body;
 
-    console.log("INPUT RECEIVED:", req.body);
+    console.log("INPUT:", req.body);
 
-    // fake public signal (you already use this style)
-    const publicSignals = ["1"];
+    // --------------------------
+    // CREATE INPUT FOR CIRCUIT
+    // --------------------------
+    const input = {
+      age: parseInt(age),
+      threshold: 16
+    };
 
-    console.log("PUBLIC SIGNALS:", publicSignals);
+    fs.writeFileSync(inputPath, JSON.stringify(input));
 
-    // ==============================
-    // FILE CHECK (REAL ERROR SOURCE)
-    // ==============================
+    // --------------------------
+    // CHECK FILES
+    // --------------------------
     if (!fs.existsSync(wasmPath) || !fs.existsSync(zkeyPath)) {
-      console.error("MISSING FILES:");
-      console.error("WASM:", fs.existsSync(wasmPath));
-      console.error("ZKEY:", fs.existsSync(zkeyPath));
-
       return res.status(500).json({
         success: false,
-        error: "Circuit files missing (WASM or ZKEY)",
+        error: "Circuit files missing"
       });
     }
 
-    // ==============================
-    // MOCK ZK PROOF LOGIC (SAFE FOR NOW)
-    // Replace this with snarkjs later
-    // ==============================
-    const isAdult = parseInt(age) >= 16;
+    // --------------------------
+    // REAL ZK PROOF GENERATION
+    // --------------------------
+    const { proof, publicSignals } =
+      await snarkjs.groth16.fullProve(
+        input,
+        wasmPath,
+        zkeyPath
+      );
 
-    const proof = {
-      proof: {
-        pi_a: ["0x1", "0x2"],
-        pi_b: [["0x3", "0x4"], ["0x5", "0x6"]],
-        pi_c: ["0x7", "0x8"],
-      },
-      publicSignals,
-    };
-
+    // --------------------------
+    // RESPONSE
+    // --------------------------
     return res.json({
       success: true,
-      verified: isAdult,
+      verified: true,
       proof,
+      publicSignals
     });
+
   } catch (err) {
-    console.error("SERVER ERROR:", err);
+    console.error("ZK ERROR:", err);
     return res.status(500).json({
       success: false,
-      error: err.message,
+      error: err.message
     });
   }
 });
 
 // ==============================
-// START SERVER (RENDER SAFE PORT)
+// START SERVER
 // ==============================
 const PORT = process.env.PORT || 10000;
 
 app.listen(PORT, () => {
-  console.log(`Vyntra API running on port ${PORT}`);
+  console.log("Vyntra ZK API running on", PORT);
 });
