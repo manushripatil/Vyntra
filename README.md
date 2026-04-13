@@ -43,7 +43,7 @@ node server.js
 ### Open in browser
 http://localhost:3000
 
-## Expected Behavior
+## Expected Output
 Input: 15 → Not Verified  
 Input: 16 → Verified
 
