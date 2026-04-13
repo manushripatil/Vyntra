@@ -5,55 +5,67 @@ const path = require("path");
 const snarkjs = require("snarkjs");
 
 const app = express();
+
 app.use(cors());
 app.use(express.json());
 
-// =====================
-// STATIC FRONTEND
-// =====================
+// --------------------
+// Serve frontend
+// --------------------
 app.use(express.static(path.join(__dirname, "public")));
 
-// =====================
-// ROUTES
-// =====================
 app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "public", "index.html"));
 });
 
-// =====================
-// ZK PATHS
-// =====================
+// --------------------
+// Circuit paths
+// --------------------
 const wasmPath = path.join(__dirname, "clean_js", "clean.wasm");
 const zkeyPath = path.join(__dirname, "circuit_final.zkey");
 
-// =====================
-// API
-// =====================
+// --------------------
+// Health check (optional but useful)
+// --------------------
+app.get("/health", (req, res) => {
+  res.json({
+    status: "ok",
+    wasmExists: fs.existsSync(wasmPath),
+    zkeyExists: fs.existsSync(zkeyPath)
+  });
+});
+
+// --------------------
+// ZK Proof endpoint
+// --------------------
 app.post("/prove-age", async (req, res) => {
   try {
-    const { age } = req.body;
-
     console.log("INPUT RECEIVED:", req.body);
 
+    const age = parseInt(req.body.age);
+
+    // IMPORTANT: ONLY what circuit expects
+    const input = {
+      age: age
+    };
+
+    // Check files exist (prevents silent Render chaos)
     if (!fs.existsSync(wasmPath) || !fs.existsSync(zkeyPath)) {
-      console.error("Missing circuit files");
+      console.error("Circuit files missing");
       return res.status(500).json({
         success: false,
         error: "Circuit files missing (WASM or ZKEY)"
       });
     }
 
-    const input = {
-      age: parseInt(age),
-      threshold: 16
-    };
+    // Generate proof
+    const { proof, publicSignals } = await snarkjs.groth16.fullProve(
+      input,
+      wasmPath,
+      zkeyPath
+    );
 
-    const { proof, publicSignals } =
-      await snarkjs.groth16.fullProve(
-        input,
-        wasmPath,
-        zkeyPath
-      );
+    console.log("PROOF GENERATED");
 
     return res.json({
       success: true,
@@ -64,6 +76,7 @@ app.post("/prove-age", async (req, res) => {
 
   } catch (err) {
     console.error("SERVER ERROR:", err);
+
     return res.status(500).json({
       success: false,
       error: err.message
@@ -71,9 +84,9 @@ app.post("/prove-age", async (req, res) => {
   }
 });
 
-// =====================
-// START SERVER
-// =====================
+// --------------------
+// Start server
+// --------------------
 const PORT = process.env.PORT || 10000;
 
 app.listen(PORT, () => {
