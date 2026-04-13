@@ -1,10 +1,10 @@
 document.addEventListener("DOMContentLoaded", () => {
     const button = document.getElementById("verifyBtn");
     const input = document.getElementById("ageInput");
-    const resultBox = document.getElementById("result");
+    const result = document.getElementById("result");
 
-    if (!button || !input) {
-        console.error("Missing HTML elements (verifyBtn or ageInput)");
+    if (!button || !input || !result) {
+        console.error("Missing HTML elements");
         return;
     }
 
@@ -12,19 +12,17 @@ document.addEventListener("DOMContentLoaded", () => {
         console.log("BUTTON CLICKED");
 
         const age = input.value;
-
         console.log("AGE:", age);
 
-        // basic validation
         if (!age) {
-            resultBox.innerText = "Please enter an age";
+            result.innerText = "Please enter an age";
             return;
         }
 
         try {
-            resultBox.innerText = "Verifying...";
+            result.innerText = "Verifying...";
 
-            const res = await fetch("/prove-age", {
+            const response = await fetch("/prove-age", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
@@ -32,23 +30,19 @@ document.addEventListener("DOMContentLoaded", () => {
                 body: JSON.stringify({ age })
             });
 
-            if (!res.ok) {
-                throw new Error("Server error");
-            }
-
-            const data = await res.json();
+            const data = await response.json();
 
             console.log("SERVER RESPONSE:", data);
 
             if (data.verified === true) {
-                resultBox.innerText = "✅ Verified (16+)";
+                result.innerText = "✅ Verified (16+)";
             } else {
-                resultBox.innerText = "❌ Not Verified";
+                result.innerText = "❌ Not Verified";
             }
 
         } catch (err) {
             console.error("ERROR:", err);
-            resultBox.innerText = "Server not reachable";
+            result.innerText = "Server not reachable";
         }
     });
 });
