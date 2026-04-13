@@ -1,3 +1,9 @@
 node_modules/
+build/
+clean_js/
+*.r1cs
+*.sym
+*.wasm
+*.zkey
 *.ptau
 .DS_Store
