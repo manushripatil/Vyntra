@@ -1,19 +1,14 @@
 async function verifyAge() {
   const ageInput = document.getElementById("ageInput");
-  const verifyBtn = document.getElementById("verifyBtn");
+  const result = document.getElementById("result");
 
   console.log("BUTTON CLICKED");
-
-  if (!ageInput || !verifyBtn) {
-    console.error("Missing HTML elements (verifyBtn or ageInput)");
-    return;
-  }
 
   const age = ageInput.value;
   console.log("AGE:", age);
 
   try {
-    const res = await fetch("https://vyntra-4rae.onrender.com/prove-age", {
+    const res = await fetch("/prove-age", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
@@ -24,8 +19,6 @@ async function verifyAge() {
     const data = await res.json();
     console.log("SERVER RESPONSE:", data);
 
-    const result = document.getElementById("result");
-
     if (data.success && data.verified) {
       result.innerText = "✅ Verified";
     } else {
@@ -33,6 +26,7 @@ async function verifyAge() {
     }
 
   } catch (err) {
-    console.error("FETCH ERROR:", err);
+    console.error(err);
+    result.innerText = "Server error";
   }
 }
