@@ -33,7 +33,7 @@ app.post("/prove-age", async (req, res) => {
         console.log("PUBLIC SIGNALS:", [age >= 16 ? "1" : "0"]);
 
         // Paths (make sure these files exist)
-        const wasmPath = "./build/clean_js/clean.wasm";
+        const wasmPath = "./clean_js/clean.wasm";
         const zkeyPath = "./circuit_final.zkey";
 
         if (!fs.existsSync(wasmPath) || !fs.existsSync(zkeyPath)) {
