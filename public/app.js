@@ -10,7 +10,7 @@ async function verifyAge() {
   try {
     console.log("Sending request...");
 
-    const res = await fetch("http://localhost:3000/verify-age", {
+    const res = await fetch("/prove-age"), {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
