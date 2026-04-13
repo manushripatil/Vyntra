@@ -8,54 +8,46 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// ==============================
-// PATHS
-// ==============================
+// =====================
+// STATIC FRONTEND
+// =====================
+app.use(express.static(path.join(__dirname, "public")));
+
+// =====================
+// ROUTES
+// =====================
+app.get("/", (req, res) => {
+  res.sendFile(path.join(__dirname, "public", "index.html"));
+});
+
+// =====================
+// ZK PATHS
+// =====================
 const wasmPath = path.join(__dirname, "clean_js", "clean.wasm");
 const zkeyPath = path.join(__dirname, "circuit_final.zkey");
 
-// input.json temp file (snarkjs needs this style)
-const inputPath = path.join(__dirname, "input.json");
-
-// ==============================
-// DEBUG
-// ==============================
-console.log("ZK SERVER BOOTED");
-console.log("WASM:", fs.existsSync(wasmPath));
-console.log("ZKEY:", fs.existsSync(zkeyPath));
-
-// ==============================
-// ROUTE
-// ==============================
+// =====================
+// API
+// =====================
 app.post("/prove-age", async (req, res) => {
   try {
     const { age } = req.body;
 
-    console.log("INPUT:", req.body);
+    console.log("INPUT RECEIVED:", req.body);
 
-    // --------------------------
-    // CREATE INPUT FOR CIRCUIT
-    // --------------------------
+    if (!fs.existsSync(wasmPath) || !fs.existsSync(zkeyPath)) {
+      console.error("Missing circuit files");
+      return res.status(500).json({
+        success: false,
+        error: "Circuit files missing (WASM or ZKEY)"
+      });
+    }
+
     const input = {
       age: parseInt(age),
       threshold: 16
     };
 
-    fs.writeFileSync(inputPath, JSON.stringify(input));
-
-    // --------------------------
-    // CHECK FILES
-    // --------------------------
-    if (!fs.existsSync(wasmPath) || !fs.existsSync(zkeyPath)) {
-      return res.status(500).json({
-        success: false,
-        error: "Circuit files missing"
-      });
-    }
-
-    // --------------------------
-    // REAL ZK PROOF GENERATION
-    // --------------------------
     const { proof, publicSignals } =
       await snarkjs.groth16.fullProve(
         input,
@@ -63,9 +55,6 @@ app.post("/prove-age", async (req, res) => {
         zkeyPath
       );
 
-    // --------------------------
-    // RESPONSE
-    // --------------------------
     return res.json({
       success: true,
       verified: true,
@@ -74,7 +63,7 @@ app.post("/prove-age", async (req, res) => {
     });
 
   } catch (err) {
-    console.error("ZK ERROR:", err);
+    console.error("SERVER ERROR:", err);
     return res.status(500).json({
       success: false,
       error: err.message
@@ -82,11 +71,11 @@ app.post("/prove-age", async (req, res) => {
   }
 });
 
-// ==============================
+// =====================
 // START SERVER
-// ==============================
+// =====================
 const PORT = process.env.PORT || 10000;
 
 app.listen(PORT, () => {
-  console.log("Vyntra ZK API running on", PORT);
+  console.log("Vyntra API running on port", PORT);
 });
