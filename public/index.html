@@ -1,73 +1,78 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Vyntra Age Proof</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Vyntra Age Proof</title>
 
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background: #0f172a;
-            color: white;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-        }
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #0f0f0f;
+      color: white;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+    }
 
-        .container {
-            background: #111827;
-            padding: 30px;
-            border-radius: 12px;
-            width: 320px;
-            text-align: center;
-        }
+    input {
+      padding: 10px;
+      font-size: 16px;
+      margin: 10px;
+      border-radius: 6px;
+      border: none;
+      outline: none;
+    }
 
-        input {
-            width: 100%;
-            padding: 10px;
-            margin-top: 10px;
-            border-radius: 6px;
-            border: none;
-        }
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+      border-radius: 6px;
+      border: none;
+      cursor: pointer;
+      background: #4f46e5;
+      color: white;
+    }
 
-        button {
-            width: 100%;
-            padding: 10px;
-            margin-top: 10px;
-            border-radius: 6px;
-            border: none;
-            background: #3b82f6;
-            color: white;
-            font-weight: bold;
-            cursor: pointer;
-        }
+    button:hover {
+      background: #4338ca;
+    }
 
-        button:hover {
-            background: #2563eb;
-        }
+    #result {
+      margin-top: 20px;
+      font-size: 18px;
+    }
 
-        #result {
-            margin-top: 15px;
-        }
-    </style>
+    .card {
+      background: #1a1a1a;
+      padding: 30px;
+      border-radius: 12px;
+      text-align: center;
+      box-shadow: 0 0 20px rgba(0,0,0,0.4);
+    }
+  </style>
 </head>
 
 <body>
 
-    <div class="container">
-        <h2>Vyntra Age Proof</h2>
+  <div class="card">
+    <h1>Vyntra Age Proof</h1>
 
-        <input id="ageInput" type="number" placeholder="Enter age" />
+    <input id="ageInput" type="number" placeholder="Enter your age" />
 
-        <button id="verifyBtn">Verify</button>
+    <br />
 
-        <div id="result"></div>
-    </div>
+    <button id="verifyBtn" onclick="verifyAge()">
+      Verify
+    </button>
 
-    <script src="app.js"></script>
+    <p id="result">Waiting...</p>
+  </div>
+
+  <script src="app.js"></script>
 
 </body>
 </html>
