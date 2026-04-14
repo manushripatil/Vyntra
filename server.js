@@ -25,7 +25,7 @@ const wasmPath = path.join(__dirname, "clean_js", "clean.wasm");
 const zkeyPath = path.join(__dirname, "circuit_final.zkey");
 
 // --------------------
-// Health check (optional but useful)
+// Health check
 // --------------------
 app.get("/health", (req, res) => {
   res.json({
@@ -44,12 +44,16 @@ app.post("/prove-age", async (req, res) => {
 
     const age = parseInt(req.body.age);
 
-    // IMPORTANT: ONLY what circuit expects
-    const input = {
-      age: age
-    };
+    if (isNaN(age)) {
+      return res.status(400).json({
+        success: false,
+        error: "Invalid age input"
+      });
+    }
 
-    // Check files exist (prevents silent Render chaos)
+    const input = { age };
+
+    // Check circuit files exist
     if (!fs.existsSync(wasmPath) || !fs.existsSync(zkeyPath)) {
       console.error("Circuit files missing");
       return res.status(500).json({
@@ -65,11 +69,14 @@ app.post("/prove-age", async (req, res) => {
       zkeyPath
     );
 
-    console.log("PROOF GENERATED");
+    console.log("PUBLIC SIGNALS:", publicSignals);
+
+    // ✅ ACTUAL VERIFICATION LOGIC (the thing that was missing...)
+    const isVerified = publicSignals[0] === "1";
 
     return res.json({
       success: true,
-      verified: true,
+      verified: isVerified,
       proof,
       publicSignals
     });
