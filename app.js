@@ -1,16 +1,22 @@
 async function verifyAge() {
-  const age = document.getElementById("age").value;
+  const ageInput = document.getElementById("age");
   const result = document.getElementById("result");
+
+  const age = ageInput.value;
 
   console.log("BUTTON CLICKED");
   console.log("AGE:", age);
 
+  // Basic validation so your API isn’t fed nonsense
+  if (!age || isNaN(age)) {
+    result.innerText = "Enter a valid age";
+    return;
+  }
+
   result.innerText = "Verifying...";
 
   try {
-    console.log("Sending request...");
-
-    const res = await fetch("http://localhost:3000/verify-age", {
+    const res = await fetch("/prove-age", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
@@ -20,19 +26,22 @@ async function verifyAge() {
 
     const data = await res.json();
 
-    console.log("SERVER RESPONSE:", JSON.stringify(data, null, 2));
+    console.log("SERVER RESPONSE:", data);
 
     if (!data.success) {
-      result.innerText = "Server error";
+      result.innerText = "Server error: " + data.error;
       return;
     }
 
-    result.innerText = data.allowed
-      ? "✅ Allowed (16+)"
-      : "❌ Not allowed";
+    // THIS is the only thing that matters
+    if (data.verified) {
+      result.innerText = "✅ Allowed (16+)";
+    } else {
+      result.innerText = "❌ Not allowed";
+    }
 
   } catch (err) {
-    console.error(err);
+    console.error("FETCH ERROR:", err);
     result.innerText = "Server not reachable";
   }
 }
