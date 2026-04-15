@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Vyntra ZK Proof Demo</title>
+  <title>Vyntra ZK Proof</title>
 
   <style>
     body {
@@ -15,49 +15,49 @@
     }
 
     .card {
-      background: #1b1b1b;
+      background: #1c1c1c;
       padding: 20px;
       border-radius: 12px;
-      width: 400px;
+      width: 420px;
       margin: auto;
       box-shadow: 0 0 20px rgba(0,0,0,0.4);
     }
 
     input {
-      padding: 10px;
       width: 90%;
+      padding: 10px;
       margin: 10px 0;
     }
 
     button {
-      padding: 10px 20px;
-      cursor: pointer;
+      width: 95%;
+      padding: 10px;
       background: #4f9cff;
       border: none;
       color: white;
       border-radius: 6px;
-      width: 95%;
+      cursor: pointer;
     }
 
     .toggles {
       text-align: left;
       margin: 10px 0;
+      font-size: 14px;
+      color: #ccc;
     }
 
     .result {
-      margin-top: 20px;
-      text-align: left;
-      white-space: pre-wrap;
+      margin-top: 15px;
       background: #111;
       padding: 10px;
       border-radius: 8px;
+      text-align: left;
+      white-space: pre-wrap;
     }
 
     label {
       display: block;
       margin: 5px 0;
-      font-size: 14px;
-      color: #ccc;
     }
   </style>
 </head>
@@ -68,7 +68,7 @@
 
   <div class="card">
 
-    <input id="age" type="number" placeholder="Enter age"/>
+    <input id="ageInput" type="number" placeholder="Enter age" />
 
     <div class="toggles">
       <label><input type="checkbox" id="toggleProof"> Show ZK Proof</label>
@@ -76,7 +76,7 @@
       <label><input type="checkbox" id="toggleExplain" checked> Privacy Explanation</label>
     </div>
 
-    <button onclick="verifyAge()">Generate Proof</button>
+    <button id="verifyBtn">Generate Proof</button>
 
     <div id="result" class="result"></div>
 
