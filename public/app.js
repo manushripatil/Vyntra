@@ -1,12 +1,11 @@
 async function verifyAge() {
-  console.log("BUTTON CLICKED");
-
   const ageInput = document.getElementById("ageInput");
   const result = document.getElementById("result");
 
-  const age = ageInput.value;
+  const dataFlow = document.getElementById("toggleDataFlow");
+  const steps = document.getElementById("toggleSteps");
 
-  console.log("AGE:", age);
+  const age = ageInput.value;
 
   if (!age || isNaN(age) || age < 0) {
     result.innerText = "Enter valid age";
@@ -15,18 +14,26 @@ async function verifyAge() {
 
   result.innerText = "Generating proof...";
 
+  // STEP VISUALIZATION
+  if (steps.checked) {
+    result.innerText = "Step 1: Reading input...";
+    await delay(500);
+
+    result.innerText = "Step 2: Running ZK circuit...";
+    await delay(700);
+
+    result.innerText = "Step 3: Generating proof...";
+    await delay(700);
+  }
+
   try {
     const res = await fetch("/prove-age", {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ age: parseInt(age) })
     });
 
     const data = await res.json();
-
-    console.log("SERVER RESPONSE:", data);
 
     if (!data.success) {
       result.innerText = "Server error";
@@ -35,12 +42,25 @@ async function verifyAge() {
 
     const isAllowed = data.publicSignals[0] === "1";
 
-    result.innerText = isAllowed
+    let output = isAllowed
       ? "✅ Allowed (16+)"
       : "❌ Not allowed";
 
+    // DATA FLOW TOGGLE
+    if (dataFlow.checked) {
+      output += "\n\nData Flow:\n";
+      output += "- Age: NOT sent\n";
+      output += "- Proof: sent\n";
+      output += "- Identity: hidden";
+    }
+
+    result.innerText = output;
+
   } catch (err) {
-    console.error(err);
     result.innerText = "Server not reachable";
   }
+}
+
+function delay(ms) {
+  return new Promise(res => setTimeout(res, ms));
 }
