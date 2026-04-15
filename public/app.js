@@ -5,11 +5,11 @@ async function verifyAge() {
   const result = document.getElementById("result");
 
   const age = ageInput.value;
+
   console.log("AGE:", age);
 
-  // Basic validation (so someone doesn’t enter -42 and break reality)
   if (!age || isNaN(age) || age < 0) {
-    result.innerText = "Enter a valid age";
+    result.innerText = "Enter valid age";
     return;
   }
 
@@ -25,15 +25,14 @@ async function verifyAge() {
     });
 
     const data = await res.json();
+
     console.log("SERVER RESPONSE:", data);
 
-    // Handle backend failure
     if (!data.success) {
       result.innerText = "Server error";
       return;
     }
 
-    // ✅ THIS is the real logic (not data.verified)
     const isAllowed = data.publicSignals[0] === "1";
 
     result.innerText = isAllowed
@@ -41,7 +40,7 @@ async function verifyAge() {
       : "❌ Not allowed";
 
   } catch (err) {
-    console.error("FETCH ERROR:", err);
+    console.error(err);
     result.innerText = "Server not reachable";
   }
 }
