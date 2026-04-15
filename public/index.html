@@ -1,68 +1,69 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Vyntra</title>
-
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
-
   <style>
     body {
-      font-family: Inter;
       background: #0a0a0a;
       color: white;
+      font-family: Arial;
       display: flex;
       justify-content: center;
       align-items: center;
       height: 100vh;
     }
 
-    .card {
-      background: rgba(255,255,255,0.05);
-      padding: 30px;
-      border-radius: 12px;
+    .box {
       width: 320px;
-      text-align: center;
+      padding: 20px;
+      background: rgba(255,255,255,0.05);
+      border-radius: 12px;
     }
 
-    input {
+    input, button {
       width: 100%;
       padding: 10px;
       margin-top: 10px;
-      border-radius: 6px;
-      border: none;
     }
 
     button {
-      margin-top: 10px;
-      width: 100%;
-      padding: 10px;
       background: #4f9cff;
       border: none;
-      border-radius: 6px;
       color: white;
       cursor: pointer;
     }
 
     .result {
       margin-top: 15px;
+      white-space: pre-line;
+    }
+
+    .toggles {
+      margin-top: 10px;
+      text-align: left;
+      font-size: 14px;
     }
   </style>
 </head>
 
 <body>
 
-  <div class="card">
-    <h2>Vyntra</h2>
-    <p>Zero-Knowledge Age Verification</p>
+<div class="box">
+  <h2>Vyntra</h2>
 
-    <input id="ageInput" type="number" placeholder="Enter age"/>
-    <button onclick="verifyAge()">Generate Proof</button>
+  <input id="ageInput" type="number" placeholder="Enter age">
 
-    <div class="result" id="result"></div>
+  <div class="toggles">
+    <label><input type="checkbox" id="toggleDataFlow"> Data Flow View</label><br>
+    <label><input type="checkbox" id="toggleSteps"> Proof Steps</label>
   </div>
 
-  <script src="app.js"></script>
+  <button onclick="verifyAge()">Generate Proof</button>
+
+  <div class="result" id="result"></div>
+</div>
+
+<script src="app.js"></script>
+
 </body>
 </html>
