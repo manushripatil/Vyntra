@@ -1,17 +1,22 @@
+document.getElementById("verifyBtn").addEventListener("click", verifyAge);
+
 async function verifyAge() {
-  const age = document.getElementById("age").value;
+  const ageInput = document.getElementById("ageInput");
   const result = document.getElementById("result");
 
   const showProof = document.getElementById("toggleProof").checked;
   const showSignals = document.getElementById("toggleSignals").checked;
   const showExplain = document.getElementById("toggleExplain").checked;
 
-  result.innerText = "🧠 Generating zero-knowledge proof...";
+  const age = ageInput.value;
 
+  // safety check (because humans love breaking things)
   if (!age || isNaN(age) || age < 0) {
     result.innerText = "Enter a valid age";
     return;
   }
+
+  result.innerText = "🧠 Generating zero-knowledge proof...";
 
   try {
     const res = await fetch("/prove-age", {
@@ -23,7 +28,7 @@ async function verifyAge() {
     const data = await res.json();
 
     if (!data.success) {
-      result.innerText = "❌ Proof generation failed";
+      result.innerText = "❌ Server error during proof generation";
       return;
     }
 
@@ -32,10 +37,10 @@ async function verifyAge() {
     let output = "";
 
     output += isAllowed
-      ? "✅ VERIFIED: Age ≥ 16\n"
-      : "❌ NOT VERIFIED: Age < 16\n";
+      ? "✅ VERIFIED (age ≥ 16)\n"
+      : "❌ NOT VERIFIED (age < 16)\n";
 
-    output += "\n--- RESULTS ---\n";
+    output += "\n--- ZK RESULT ---\n";
 
     if (showSignals) {
       output += "\n📡 Public Signals:\n";
@@ -43,18 +48,18 @@ async function verifyAge() {
     }
 
     if (showProof) {
-      output += "\n🔐 ZK Proof (Groth16):\n";
+      output += "\n🔐 Groth16 Proof:\n";
       output += JSON.stringify(data.proof, null, 2) + "\n";
     }
 
     if (showExplain) {
-      output += "\n🛡️ Privacy Layer:\n";
-      output += "Your actual age is never transmitted.\nOnly a cryptographic proof is verified on the server.\n";
+      output += "\n🛡️ Privacy Guarantee:\n";
+      output += "Your actual age is never transmitted.\nOnly a cryptographic proof is verified.\n";
     }
 
     result.innerText = output;
 
   } catch (err) {
-    result.innerText = "Server error: " + err.message;
+    result.innerText = "Server unreachable: " + err.message;
   }
 }
