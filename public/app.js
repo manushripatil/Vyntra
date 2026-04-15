@@ -1,22 +1,22 @@
 document.getElementById("verifyBtn").addEventListener("click", verifyAge);
 
 async function verifyAge() {
-  const ageInput = document.getElementById("ageInput");
+  const age = document.getElementById("ageInput").value;
+
   const result = document.getElementById("result");
+  const status = document.getElementById("status");
+  const badge = document.getElementById("badge");
 
   const showProof = document.getElementById("toggleProof").checked;
   const showSignals = document.getElementById("toggleSignals").checked;
   const showExplain = document.getElementById("toggleExplain").checked;
 
-  const age = ageInput.value;
-
-  // safety check (because humans love breaking things)
   if (!age || isNaN(age) || age < 0) {
-    result.innerText = "Enter a valid age";
+    status.innerText = "Invalid input";
     return;
   }
 
-  result.innerText = "🧠 Generating zero-knowledge proof...";
+  status.innerText = "Generating proof...";
 
   try {
     const res = await fetch("/prove-age", {
@@ -28,38 +28,42 @@ async function verifyAge() {
     const data = await res.json();
 
     if (!data.success) {
-      result.innerText = "❌ Server error during proof generation";
+      status.innerText = "Proof generation failed";
       return;
     }
 
-    const isAllowed = data.publicSignals[0] === "1";
+    const ok = data.publicSignals[0] === "1";
+
+    // badge UI
+    badge.className = "badge " + (ok ? "ok" : "bad");
+    badge.innerText = ok ? "VERIFIED (16+)" : "NOT VERIFIED";
 
     let output = "";
 
-    output += isAllowed
-      ? "✅ VERIFIED (age ≥ 16)\n"
-      : "❌ NOT VERIFIED (age < 16)\n";
-
-    output += "\n--- ZK RESULT ---\n";
+    output += "ZK PROOF RESULT\n\n";
 
     if (showSignals) {
-      output += "\n📡 Public Signals:\n";
-      output += JSON.stringify(data.publicSignals, null, 2) + "\n";
+      output += "Public Signals:\n";
+      output += JSON.stringify(data.publicSignals, null, 2) + "\n\n";
     }
 
     if (showProof) {
-      output += "\n🔐 Groth16 Proof:\n";
-      output += JSON.stringify(data.proof, null, 2) + "\n";
+      output += "Groth16 Proof:\n";
+      output += JSON.stringify(data.proof, null, 2) + "\n\n";
     }
 
     if (showExplain) {
-      output += "\n🛡️ Privacy Guarantee:\n";
-      output += "Your actual age is never transmitted.\nOnly a cryptographic proof is verified.\n";
+      output += "Privacy Model:\n";
+      output += "• Input never leaves client as readable data\n";
+      output += "• Server only verifies cryptographic proof\n";
+      output += "• No identity leakage occurs\n";
     }
 
     result.innerText = output;
 
-  } catch (err) {
-    result.innerText = "Server unreachable: " + err.message;
+    status.innerText = "Proof generated successfully";
+
+  } catch (e) {
+    status.innerText = "Server error: " + e.message;
   }
 }
