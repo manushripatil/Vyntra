@@ -1,88 +1,167 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Vyntra ZK Proof</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Vyntra ZK Console</title>
 
-  <style>
-    body {
-      font-family: Arial;
-      background: #0f0f0f;
-      color: white;
-      text-align: center;
-      padding: 40px;
-    }
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
 
-    .card {
-      background: #1c1c1c;
-      padding: 20px;
-      border-radius: 12px;
-      width: 420px;
-      margin: auto;
-      box-shadow: 0 0 20px rgba(0,0,0,0.4);
-    }
+<style>
+  body {
+    margin: 0;
+    font-family: Inter, sans-serif;
+    background: radial-gradient(circle at top, #141414, #070707);
+    color: #fff;
+    display: flex;
+    justify-content: center;
+    padding: 50px;
+  }
 
-    input {
-      width: 90%;
-      padding: 10px;
-      margin: 10px 0;
-    }
+  .app {
+    width: 900px;
+  }
 
-    button {
-      width: 95%;
-      padding: 10px;
-      background: #4f9cff;
-      border: none;
-      color: white;
-      border-radius: 6px;
-      cursor: pointer;
-    }
+  .header {
+    margin-bottom: 25px;
+  }
 
-    .toggles {
-      text-align: left;
-      margin: 10px 0;
-      font-size: 14px;
-      color: #ccc;
-    }
+  .title {
+    font-size: 28px;
+    font-weight: 600;
+  }
 
-    .result {
-      margin-top: 15px;
-      background: #111;
-      padding: 10px;
-      border-radius: 8px;
-      text-align: left;
-      white-space: pre-wrap;
-    }
+  .subtitle {
+    color: #aaa;
+    margin-top: 5px;
+  }
 
-    label {
-      display: block;
-      margin: 5px 0;
-    }
-  </style>
+  .grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+  }
+
+  .card {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 16px;
+    padding: 20px;
+    backdrop-filter: blur(10px);
+  }
+
+  input {
+    width: 100%;
+    padding: 12px;
+    border-radius: 10px;
+    border: none;
+    outline: none;
+    background: #111;
+    color: white;
+    margin-top: 10px;
+  }
+
+  button {
+    width: 100%;
+    margin-top: 15px;
+    padding: 12px;
+    border-radius: 10px;
+    border: none;
+    background: linear-gradient(90deg, #4f9cff, #6a5cff);
+    color: white;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.2s;
+  }
+
+  button:hover {
+    transform: scale(1.02);
+  }
+
+  .toggles label {
+    display: flex;
+    justify-content: space-between;
+    margin: 10px 0;
+    color: #ccc;
+    font-size: 14px;
+  }
+
+  .result {
+    white-space: pre-wrap;
+    font-family: monospace;
+    font-size: 13px;
+    max-height: 400px;
+    overflow-y: auto;
+    background: #0b0b0b;
+    padding: 15px;
+    border-radius: 12px;
+    border: 1px solid #222;
+  }
+
+  .status {
+    font-size: 14px;
+    color: #aaa;
+    margin-top: 10px;
+  }
+
+  .badge {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 12px;
+    margin-top: 10px;
+  }
+
+  .ok { background: #1f6f3b; }
+  .bad { background: #7a1f1f; }
+</style>
 </head>
 
 <body>
 
-  <h1>Vyntra Zero-Knowledge Age Proof</h1>
+<div class="app">
 
-  <div class="card">
+  <div class="header">
+    <div class="title">Vyntra Zero-Knowledge Console</div>
+    <div class="subtitle">Private verification using Groth16 proofs</div>
+  </div>
 
-    <input id="ageInput" type="number" placeholder="Enter age" />
+  <div class="grid">
 
-    <div class="toggles">
-      <label><input type="checkbox" id="toggleProof"> Show ZK Proof</label>
-      <label><input type="checkbox" id="toggleSignals"> Show Public Signals</label>
-      <label><input type="checkbox" id="toggleExplain" checked> Privacy Explanation</label>
+    <!-- INPUT PANEL -->
+    <div class="card">
+      <h3>Input</h3>
+
+      <input id="ageInput" type="number" placeholder="Enter age (kept private)" />
+
+      <button id="verifyBtn">Generate Proof</button>
+
+      <div class="status" id="status"></div>
     </div>
 
-    <button id="verifyBtn">Generate Proof</button>
+    <!-- CONTROLS -->
+    <div class="card">
+      <h3>Visualization Controls</h3>
 
-    <div id="result" class="result"></div>
+      <div class="toggles">
+        <label>Show Proof <input type="checkbox" id="toggleProof"></label>
+        <label>Show Public Signals <input type="checkbox" id="toggleSignals"></label>
+        <label>Explain Privacy <input type="checkbox" id="toggleExplain" checked></label>
+      </div>
+    </div>
 
   </div>
 
-  <script src="app.js"></script>
+  <!-- OUTPUT -->
+  <div class="card" style="margin-top:20px;">
+    <h3>Verification Output</h3>
+    <div id="badge"></div>
+    <div class="result" id="result">Waiting for input...</div>
+  </div>
+
+</div>
+
+<script src="app.js"></script>
 
 </body>
 </html>
