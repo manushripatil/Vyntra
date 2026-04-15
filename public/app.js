@@ -1,54 +1,60 @@
 async function verifyAge() {
   const age = document.getElementById("age").value;
   const result = document.getElementById("result");
-  const flow = document.getElementById("flow");
-  const payload = document.getElementById("payload");
 
-  flow.innerHTML = "";
-  result.innerText = "Generating proof...";
+  const showProof = document.getElementById("toggleProof").checked;
+  const showSignals = document.getElementById("toggleSignals").checked;
+  const showExplain = document.getElementById("toggleExplain").checked;
 
-  // STEP 1
-  flow.innerHTML += "<div class='step'>✔ Input captured locally</div>";
-  await delay(500);
+  result.innerText = "🧠 Generating zero-knowledge proof...";
 
-  // STEP 2
-  flow.innerHTML += "<div class='step'>⚙️ Initializing circuit</div>";
-  await delay(600);
+  if (!age || isNaN(age) || age < 0) {
+    result.innerText = "Enter a valid age";
+    return;
+  }
 
-  // STEP 3
-  flow.innerHTML += "<div class='step'>🔐 Generating witness</div>";
-  await delay(700);
+  try {
+    const res = await fetch("/prove-age", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ age: parseInt(age) })
+    });
 
-  // BACKEND CALL
-  const res = await fetch("/prove-age", {
-    method: "POST",
-    headers: {"Content-Type": "application/json"},
-    body: JSON.stringify({ age })
-  });
+    const data = await res.json();
 
-  const data = await res.json();
+    if (!data.success) {
+      result.innerText = "❌ Proof generation failed";
+      return;
+    }
 
-  const isAllowed = data.publicSignals[0] === "1";
+    const isAllowed = data.publicSignals[0] === "1";
 
-  // STEP 4
-  flow.innerHTML += "<div class='step'>🧮 Constraint solving complete</div>";
-  await delay(500);
+    let output = "";
 
-  flow.innerHTML += "<div class='step'>✅ Proof generated</div>";
+    output += isAllowed
+      ? "✅ VERIFIED: Age ≥ 16\n"
+      : "❌ NOT VERIFIED: Age < 16\n";
 
-  // NETWORK VISUAL
-  payload.innerText = JSON.stringify({
-    proof: "0x...",
-    publicSignals: data.publicSignals,
-    note: "NO AGE SENT"
-  }, null, 2);
+    output += "\n--- RESULTS ---\n";
 
-  // RESULT
-  result.innerText = isAllowed
-    ? "✅ Verified (ZK Success)"
-    : "❌ Not verified";
-}
+    if (showSignals) {
+      output += "\n📡 Public Signals:\n";
+      output += JSON.stringify(data.publicSignals, null, 2) + "\n";
+    }
 
-function delay(ms) {
-  return new Promise(res => setTimeout(res, ms));
+    if (showProof) {
+      output += "\n🔐 ZK Proof (Groth16):\n";
+      output += JSON.stringify(data.proof, null, 2) + "\n";
+    }
+
+    if (showExplain) {
+      output += "\n🛡️ Privacy Layer:\n";
+      output += "Your actual age is never transmitted.\nOnly a cryptographic proof is verified on the server.\n";
+    }
+
+    result.innerText = output;
+
+  } catch (err) {
+    result.innerText = "Server error: " + err.message;
+  }
 }
