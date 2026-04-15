@@ -1,199 +1,43 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Vyntra</title>
-
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
-
-<style>
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: Inter;
-}
-
-body {
-  background: radial-gradient(circle at top, #111, #050505);
-  color: white;
-  min-height: 100vh;
-}
-
-/* HEADER */
-header {
-  display: flex;
-  justify-content: space-between;
-  padding: 20px 40px;
-  align-items: center;
-}
-
-.logo {
-  font-weight: 700;
-  letter-spacing: 1px;
-  font-size: 18px;
-  display: flex;
-  gap: 10px;
-  align-items: center;
-}
-
-.badge {
-  font-size: 12px;
-  padding: 4px 10px;
-  border: 1px solid #333;
-  border-radius: 999px;
-  color: #aaa;
-}
-
-/* HERO */
-.hero {
-  display: flex;
-  justify-content: space-between;
-  padding: 80px;
-  gap: 60px;
-}
-
-.left {
-  max-width: 520px;
-}
-
-h1 {
-  font-size: 44px;
-  line-height: 1.1;
-}
-
-p {
-  margin-top: 20px;
-  color: #aaa;
-  font-size: 16px;
-}
-
-/* CARD */
-.card {
-  width: 340px;
-  background: rgba(255,255,255,0.04);
-  border: 1px solid rgba(255,255,255,0.08);
-  border-radius: 16px;
-  padding: 20px;
-  backdrop-filter: blur(10px);
-}
-
-input {
-  width: 100%;
-  padding: 12px;
-  margin-top: 10px;
-  border-radius: 10px;
-  border: 1px solid #333;
-  background: #0b0b0b;
-  color: white;
-}
-
-button {
-  width: 100%;
-  margin-top: 12px;
-  padding: 12px;
-  border-radius: 10px;
-  border: none;
-  background: #4f9cff;
-  color: white;
-  cursor: pointer;
-  font-weight: 600;
-}
-
-button:hover {
-  opacity: 0.85;
-}
-
-.result {
-  margin-top: 12px;
-  font-weight: 600;
-}
-
-/* TOGGLES */
-.toggle-box {
-  margin-top: 20px;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-
-.toggle {
-  display: flex;
-  justify-content: space-between;
-  padding: 10px 12px;
-  border: 1px solid #222;
-  border-radius: 10px;
-  font-size: 13px;
-  color: #aaa;
-}
-
-/* SWITCH */
-.switch {
-  position: relative;
-  width: 40px;
-  height: 20px;
-}
-
-.switch input {
-  display: none;
-}
-
-.slider {
-  position: absolute;
-  cursor: pointer;
-  top: 0; left: 0; right: 0; bottom: 0;
-  background-color: #333;
-  transition: .3s;
-  border-radius: 20px;
-}
-
-.slider:before {
-  position: absolute;
-  content: "";
-  height: 14px;
-  width: 14px;
-  left: 3px;
-  bottom: 3px;
-  background-color: white;
-  transition: .3s;
-  border-radius: 50%;
-}
-
-input:checked + .slider {
-  background-color: #4f9cff;
-}
-
-input:checked + .slider:before {
-  transform: translateX(20px);
-}
-</style>
+  <title>Vyntra</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-<header>
-  <div class="logo">Vyntra <span class="badge">ZK API</span></div>
-</header>
+<header>Vyntra</header>
 
 <section class="hero">
 
   <div class="left">
     <h1>Verify age without exposing identity</h1>
-    <p>
-      Zero-knowledge proof infrastructure for privacy-first verification systems.
-    </p>
+    <p>Zero-knowledge proof system for privacy-first verification.</p>
   </div>
 
   <div class="card">
 
-    <div>Age Verification</div>
-
-    <input id="age" type="number" placeholder="Enter age"/>
-
+    <input id="age" type="number" placeholder="Enter age" />
     <button onclick="verifyAge()">Generate Proof</button>
 
     <div class="result" id="result"></div>
+
+    <!-- ZK VISUAL SYSTEM -->
+    <div class="zk-panel">
+
+      <div class="zk-title">ZK Proof Pipeline</div>
+
+      <div id="flow">
+        <div class="step">Waiting for input...</div>
+      </div>
+
+      <div class="network">
+        📡 Network Payload
+        <pre id="payload">{}</pre>
+      </div>
+
+    </div>
 
     <!-- TOGGLES -->
     <div class="toggle-box">
@@ -219,31 +63,7 @@ input:checked + .slider:before {
   </div>
 </section>
 
-<script>
-async function verifyAge() {
-  const age = document.getElementById("age").value;
-  const result = document.getElementById("result");
-
-  result.innerText = "Generating proof...";
-
-  try {
-    const res = await fetch("/prove-age", {
-      method: "POST",
-      headers: {"Content-Type": "application/json"},
-      body: JSON.stringify({ age })
-    });
-
-    const data = await res.json();
-
-    const isAllowed = data.publicSignals[0] === "1";
-
-    result.innerText = isAllowed ? "✅ Verified (16+)" : "❌ Not verified";
-
-  } catch (err) {
-    result.innerText = "Server error";
-  }
-}
-</script>
+<script src="app.js"></script>
 
 </body>
 </html>
