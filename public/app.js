@@ -2,8 +2,8 @@ async function verifyAge() {
   const ageInput = document.getElementById("ageInput");
   const result = document.getElementById("result");
 
-  const dataFlow = document.getElementById("toggleDataFlow");
   const steps = document.getElementById("toggleSteps");
+  const flow = document.getElementById("toggleDataFlow");
 
   const age = ageInput.value;
 
@@ -12,18 +12,14 @@ async function verifyAge() {
     return;
   }
 
-  result.innerText = "Generating proof...";
+  result.innerText = "Initializing proof...";
 
-  // STEP VISUALIZATION
   if (steps.checked) {
-    result.innerText = "Step 1: Reading input...";
-    await delay(500);
-
-    result.innerText = "Step 2: Running ZK circuit...";
-    await delay(700);
-
-    result.innerText = "Step 3: Generating proof...";
-    await delay(700);
+    await delay(400);
+    result.innerText = "Executing circuit...";
+    await delay(600);
+    result.innerText = "Generating witness...";
+    await delay(600);
   }
 
   try {
@@ -36,31 +32,25 @@ async function verifyAge() {
     const data = await res.json();
 
     if (!data.success) {
-      result.innerText = "Server error";
+      result.innerText = "Verification failed";
       return;
     }
 
-    const isAllowed = data.publicSignals[0] === "1";
+    const ok = data.publicSignals[0] === "1";
 
-    let output = isAllowed
-      ? "✅ Allowed (16+)"
-      : "❌ Not allowed";
+    let out = ok ? "✅ Verified (16+)" : "❌ Not verified";
 
-    // DATA FLOW TOGGLE
-    if (dataFlow.checked) {
-      output += "\n\nData Flow:\n";
-      output += "- Age: NOT sent\n";
-      output += "- Proof: sent\n";
-      output += "- Identity: hidden";
+    if (flow.checked) {
+      out += "\n\nData Flow:\n- Age: not transmitted\n- Proof: transmitted\n- Identity: never exposed";
     }
 
-    result.innerText = output;
+    result.innerText = out;
 
-  } catch (err) {
-    result.innerText = "Server not reachable";
+  } catch (e) {
+    result.innerText = "Server unreachable";
   }
 }
 
 function delay(ms) {
-  return new Promise(res => setTimeout(res, ms));
+  return new Promise(r => setTimeout(r, ms));
 }
