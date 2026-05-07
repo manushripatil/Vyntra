@@ -1,6 +1,6 @@
 # Vyntra 
 
-Vyntra is a Zero-Knowledge Proof (ZKP) based age verification system that allows users to prove they meet an age requirement without revealing their actual age.
+Vyntra is a Zero-Knowledge Proof age verification system that enables users to prove they meet an age requirement without revealing their actual age.
 
 ---
 
@@ -26,13 +26,6 @@ https://vyntra-4rae.onrender.com
 - Node.js (Express) – Backend API  
 - HTML + JavaScript – Frontend  
 - Render – Deployment  
-
----
-
-## 📂 Project Structure
-
-vyntra/
-
 
 ---
 
@@ -63,11 +56,12 @@ vyntra/
 
 ## Current Limitations
 
-- Proof is generated server-side (not fully trustless)  
-- User input is not yet cryptographically committed  
-- No external proof verification endpoint  
-- Designed as a prototype/demo  
+- Currently set to 1 age restriction (16+)
+- Designed as a prototype/demo 
 
+## Future Improvements  
+- Make it more customizable as a service (choosing specific age restriction for developer integration)
+- Require authorized credential (mock credential at the moment)
 ---
 
 ##  Run Locally
@@ -86,13 +80,6 @@ snarkjs zkey contribute circuit_0000.zkey circuit_final.zkey --name="1" -v
 node server.js  
 
 ---
-
-## Future Improvements
-
-- Client-side proof generation  
-- On-chain verification 
-- Identity commitments instead of raw age  
-- API for third-party integrations  
 
 
 ## Author
