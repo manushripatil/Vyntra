@@ -62,22 +62,6 @@ https://vyntra-4rae.onrender.com
 ## Future Improvements  
 - Make it more customizable as a service (choosing specific age restriction for developer integration)
 - Require authorized credential (mock credential at the moment)
----
-
-##  Run Locally
-
-1. Install dependencies  
-npm install  
-
-2. Compile circuit  
-circom clean.circom --r1cs --wasm --sym -l node_modules  
-
-3. Setup proving key  
-snarkjs groth16 setup clean.r1cs pot12_final.ptau circuit_0000.zkey  
-snarkjs zkey contribute circuit_0000.zkey circuit_final.zkey --name="1" -v  
-
-4. Start server  
-node server.js  
 
 ---
 
