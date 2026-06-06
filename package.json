@@ -2,28 +2,25 @@
   "name": "vyntra",
   "version": "1.0.0",
   "private": true,
-  "description": "Vyntra ZK credential system",
-  "main": "index.js",
-  "type": "commonjs",
+  "type": "module",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node server.js"
   },
   "dependencies": {
+    "circomlib": "^2.0.5",
+    "cors": "^2.8.6",
+    "express": "^5.2.1",
     "next": "^16.2.7",
     "react": "^19.2.7",
     "react-dom": "^19.2.7",
-    "snarkjs": "^0.7.6",
-    "circomlib": "^2.0.5",
-    "express": "^5.2.1",
-    "cors": "^2.8.6"
+    "snarkjs": "^0.7.6"
   },
   "devDependencies": {
-    "typescript": "^6.0.3",
     "@types/node": "^25.9.2",
     "@types/react": "^19.2.17",
-    "@types/react-dom": "^19.2.3"
+    "@types/react-dom": "^19.2.3",
+    "typescript": "^6.0.3"
   }
 }
