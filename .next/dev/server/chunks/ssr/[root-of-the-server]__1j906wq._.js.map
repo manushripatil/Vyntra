@@ -1,0 +1,6 @@
+{
+  "version": 3,
+  "sources": [],
+  "sections": [
+    {"offset": {"line": 10, "column": 0}, "map": {"version":3,"sources":["file:///Users/manushripatil/vyntra/src/pages/index.tsx"],"sourcesContent":["import Link from \"next/link\";\n\nexport default function Home() {\n  return (\n    <div style={{ padding: 20 }}>\n      <h1>Vyntra</h1>\n\n      <p>Credential-based Zero Knowledge Verification</p>\n\n      <div style={{ display: \"flex\", gap: 12, marginTop: 20 }}>\n        <Link href=\"/issuer\">Issuer</Link>\n        <Link href=\"/wallet\">Wallet</Link>\n        <Link href=\"/verify\">Verify</Link>\n      </div>\n    </div>\n  );\n}"],"names":["Home","style","padding","display","gap","marginTop","href"],"mappings":";;;;;AAAA;;;AAEe,SAASA;IACtB,qBACE,qKAAC;QAAIC,OAAO;YAAEC,SAAS;QAAG;;0BACxB,qKAAC;0BAAG;;;;;;0BAEJ,qKAAC;0BAAE;;;;;;0BAEH,qKAAC;gBAAID,OAAO;oBAAEE,SAAS;oBAAQC,KAAK;oBAAIC,WAAW;gBAAG;;kCACpD,qKAAC,gIAAI;wBAACC,MAAK;kCAAU;;;;;;kCACrB,qKAAC,gIAAI;wBAACA,MAAK;kCAAU;;;;;;kCACrB,qKAAC,gIAAI;wBAACA,MAAK;kCAAU;;;;;;;;;;;;;;;;;;AAI7B"}}]
+}

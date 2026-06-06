@@ -6,11 +6,21 @@ import Link from "next/link";
 export default function IssuerPage() {
   const [age, setAge] = useState<number>(18);
   const [status, setStatus] = useState("");
+  const [isIssuing, setIsIssuing] = useState(false);
 
-  const handleIssue = () => {
-    const credential = issueCredential(age);
-    saveCredential(credential);
-    setStatus("Credential issued and saved ✔");
+  const handleIssue = async () => {
+    setIsIssuing(true);
+    setStatus("");
+    try {
+      const credential = await issueCredential(age);
+      saveCredential(credential);
+      setStatus("Credential issued and saved ✔");
+    } catch (err) {
+      console.error(err);
+      setStatus("Failed to issue credential");
+    } finally {
+      setIsIssuing(false);
+    }
   };
 
   return (
@@ -24,8 +34,8 @@ export default function IssuerPage() {
         style={{ padding: 8 }}
       />
 
-      <button onClick={handleIssue} style={{ marginLeft: 10 }}>
-        Issue Credential
+      <button onClick={handleIssue} style={{ marginLeft: 10 }} disabled={isIssuing}>
+        {isIssuing ? "Issuing…" : "Issue Credential"}
       </button>
 
       <p>{status}</p>

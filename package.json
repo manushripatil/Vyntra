@@ -6,7 +6,10 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "node server.js"
+    "start": "node server.js",
+    "start:server": "node server.js",
+    "dev:all": "concurrently \"node server.js\" \"next dev\"",
+    "smoke": "node scripts/smoke-test.js"
   },
   "dependencies": {
     "circomlib": "^2.0.5",
@@ -21,6 +24,7 @@
     "@types/node": "^25.9.2",
     "@types/react": "^19.2.17",
     "@types/react-dom": "^19.2.3",
-    "typescript": "^6.0.3"
+    "typescript": "^6.0.3",
+    "concurrently": "^8.2.0"
   }
 }
