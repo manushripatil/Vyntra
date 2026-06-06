@@ -2,10 +2,13 @@
   "compilerOptions": {
     "target": "ES2019",
     "module": "ESNext",
-    "lib": ["DOM", "ES2020"],
-    "jsx": "react",
+    "lib": [
+      "DOM",
+      "ES2020"
+    ],
+    "jsx": "react-jsx",
     "strict": true,
-    "moduleResolution": "node",
+    "moduleResolution": "bundler",
     "esModuleInterop": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
@@ -13,8 +16,20 @@
     "isolatedModules": true,
     "noEmit": true,
     "baseUrl": ".",
-    "types": ["node", "react"]
+    "types": [
+      "node",
+      "react"
+    ],
+    "allowJs": true,
+    "incremental": true
   },
-  "include": ["src", "public", "vyntra-frontend"],
-  "exclude": ["node_modules", "build"]
+  "include": [
+    "src",
+    "public",
+    "vyntra-frontend"
+  ],
+  "exclude": [
+    "node_modules",
+    "build"
+  ]
 }
