@@ -28,5 +28,8 @@
     "@types/react-dom": "^19.2.3",
     "concurrently": "^8.2.0",
     "typescript": "^6.0.3"
+  },
+  "engines": {
+    "node": ">=20.9.0"
   }
 }
