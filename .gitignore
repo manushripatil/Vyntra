@@ -5,3 +5,18 @@ build/
 *.wasm
 *.ptau
 .DS_Store
+
+# Next
+.next/
+
+# Artifacts
+*.zkey
+*.wtns
+proof.json
+public/*.html
+public/app.js
+public/style.css
+
+# Env
+.env
+.env.local

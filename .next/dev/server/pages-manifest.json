@@ -2,5 +2,7 @@
   "/": "pages/index.js",
   "/_app": "pages/_app.js",
   "/_document": "pages/_document.js",
-  "/issuer": "pages/issuer.js"
+  "/issuer": "pages/issuer.js",
+  "/verify": "pages/verify.js",
+  "/wallet": "pages/wallet.js"
 }

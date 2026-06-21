@@ -28,7 +28,12 @@ app.use(
 );
 
 app.use(express.json());
-app.use(express.static(path.join(__dirname, "public")));
+
+// Serve legacy static frontend only when explicitly enabled or in production.
+// This avoids conflicts with a Next.js dev server running on a different port.
+if (process.env.SERVE_LEGACY_STATIC === "true" || process.env.NODE_ENV === "production") {
+  app.use(express.static(path.join(__dirname, "public")));
+}
 
 // --------------------
 // Circuit paths

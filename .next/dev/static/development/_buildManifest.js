@@ -5,6 +5,12 @@ self.__BUILD_MANIFEST = {
   "/issuer": [
     "static/chunks/pages/issuer.js"
   ],
+  "/verify": [
+    "static/chunks/pages/verify.js"
+  ],
+  "/wallet": [
+    "static/chunks/pages/wallet.js"
+  ],
   "__rewrites": {
     "afterFiles": [],
     "beforeFiles": [],
