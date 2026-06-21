@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { loadCredential, clearCredential } from "../lib/wallet";
-import Link from "next/link";
+// Use plain anchors to avoid Link typing issues across Next versions
 
 export default function WalletPage() {
   const [credential, setCredential] = useState<any>(null);
@@ -34,7 +34,7 @@ export default function WalletPage() {
       )}
 
       <div style={{ marginTop: 20 }}>
-        <Link href="/">Back</Link>
+        <a href="/">Back</a>
       </div>
     </div>
   );

@@ -5,6 +5,7 @@ import path from "path";
 import * as snarkjs from "snarkjs";
 import { fileURLToPath } from "url";
 import { createHash, randomUUID } from "crypto";
+import Redis from "ioredis";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -72,9 +73,34 @@ const rateWindowMs = Number(process.env.RATE_WINDOW_MS || 60_000);
 const rateMax = Number(process.env.RATE_MAX || 30);
 const rateMap = new Map();
 
-app.use((req, res, next) => {
+// Optional Redis-backed limiter when REDIS_URL is set (production)
+let redisClient = null;
+if (process.env.REDIS_URL) {
   try {
-    const key = req.ip || req.connection.remoteAddress || "unknown";
+    redisClient = new Redis(process.env.REDIS_URL);
+    redisClient.on('error', (e) => console.error('Redis error', e));
+  } catch (e) {
+    console.error('Failed to initialize Redis client, falling back to in-memory limiter', e);
+    redisClient = null;
+  }
+}
+
+app.use(async (req, res, next) => {
+  try {
+    const key = `rate:${req.ip || req.connection.remoteAddress || 'unknown'}`;
+
+    if (redisClient) {
+      const count = await redisClient.incr(key);
+      if (count === 1) {
+        await redisClient.expire(key, Math.ceil(rateWindowMs / 1000));
+      }
+      if (count > rateMax) {
+        return res.status(429).json({ success: false, error: 'Too many requests' });
+      }
+      return next();
+    }
+
+    // Fallback to in-memory limiter
     const now = Date.now();
     const entry = rateMap.get(key) || { ts: now, count: 0 };
     if (now - entry.ts > rateWindowMs) {
@@ -84,7 +110,7 @@ app.use((req, res, next) => {
     entry.count += 1;
     rateMap.set(key, entry);
     if (entry.count > rateMax) {
-      return res.status(429).json({ success: false, error: "Too many requests" });
+      return res.status(429).json({ success: false, error: 'Too many requests' });
     }
     next();
   } catch (err) {
@@ -209,11 +235,5 @@ app.post("/verify-proof", async (req, res) => {
   }
 });
 
-// --------------------
-// Start server
-// --------------------
-const PORT = process.env.PORT || 10000;
-
-app.listen(PORT, () => {
-  console.log(`Vyntra running on port ${PORT}`);
-});
+// Export the app so tests or external runners can import it without starting the server.
+export default app;

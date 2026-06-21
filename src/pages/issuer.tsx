@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { issueCredential } from "../lib/credentialService";
 import { saveCredential } from "../lib/wallet";
-import Link from "next/link";
+// Use plain anchors to avoid Link typing issues across Next versions
 
 export default function IssuerPage() {
   const [age, setAge] = useState<number>(18);
@@ -41,7 +41,7 @@ export default function IssuerPage() {
       <p>{status}</p>
 
       <div style={{ marginTop: 20 }}>
-        <Link href="/">Back</Link>
+        <a href="/">Back</a>
       </div>
     </div>
   );

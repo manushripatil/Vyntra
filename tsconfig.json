@@ -6,9 +6,10 @@
       "DOM",
       "ES2020"
     ],
-    "jsx": "react-jsx",
+    "jsx": "preserve",
     "strict": true,
-    "moduleResolution": "bundler",
+    "ignoreDeprecations": "6.0",
+    "moduleResolution": "node",
     "esModuleInterop": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,

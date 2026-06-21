@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import Link from "next/link";
+// Use plain anchors to avoid Link typing issues across Next versions
 import { loadCredential } from "../lib/wallet";
 
 const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:10000";
@@ -121,11 +121,30 @@ export default function VerifyPage() {
           <pre style={{ maxHeight: 240, overflow: "auto", background: "#f8f8f8", padding: 10 }}>
             {JSON.stringify({ proof: proofResult.proof, publicSignals: proofResult.publicSignals }, null, 2)}
           </pre>
+          <div style={{ marginTop: 8 }}>
+            <button
+              onClick={() => {
+                const data = JSON.stringify({ proof: proofResult.proof, publicSignals: proofResult.publicSignals }, null, 2);
+                const blob = new Blob([data], { type: 'application/json' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `proof-${Date.now()}.json`;
+                document.body.appendChild(a);
+                a.click();
+                a.remove();
+                URL.revokeObjectURL(url);
+              }}
+              style={{ marginTop: 8 }}
+            >
+              Export proof
+            </button>
+          </div>
         </div>
       )}
 
       <div style={{ marginTop: 20 }}>
-        <Link href="/">Back</Link>
+        <a href="/">Back</a>
       </div>
     </div>
   );
