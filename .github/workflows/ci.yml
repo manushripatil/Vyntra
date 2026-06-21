@@ -21,7 +21,7 @@ jobs:
         run: npm run build
       - name: Start server in background
         run: |
-          PORT=10000 node server.js &
-          sleep 1
+          PORT=10000 node start-server.js &
+          sleep 2
       - name: Smoke test
         run: npm run smoke

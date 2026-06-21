@@ -45,15 +45,18 @@ const verificationKeyPath = path.join(__dirname, "verification_key.json");
 
 // Startup checks for required artifacts
 function assertExists(p, name) {
+  console.log(`Checking for ${name} at ${p}...`);
   if (!fs.existsSync(p)) {
     console.error(`Required file missing: ${name} at ${p}`);
     process.exit(1);
   }
+  console.log(`✓ Found ${name}`);
 }
 
 assertExists(wasmPath, "clean.wasm");
 assertExists(zkeyPath, "circuit_final.zkey");
 assertExists(verificationKeyPath, "verification_key.json");
+console.log("✓ All required files found");
 
 const verificationKey = JSON.parse(fs.readFileSync(verificationKeyPath, "utf8"));
 
