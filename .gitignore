@@ -2,7 +2,6 @@ node_modules/
 build/
 *.r1cs
 *.sym
-*.wasm
 *.ptau
 .DS_Store
 
@@ -11,7 +10,6 @@ build/
 .next/**/*
 
 # Artifacts
-*.zkey
 *.wtns
 proof.json
 public/*.html
