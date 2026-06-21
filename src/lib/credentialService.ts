@@ -1,14 +1,20 @@
 import { AgeCredential } from "../types/credential";
 
-const API_BASE = (process.env.NEXT_PUBLIC_API_BASE_URL as string) || "http://localhost:10000";
+const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL || "";
 
-export async function issueCredential(age: number): Promise<AgeCredential> {
+export async function issueCredential(
+  age: number
+): Promise<AgeCredential> {
   const res = await fetch(`${API_BASE}/issue`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      // If you set NEXT_PUBLIC_ISSUER_TOKEN in your env, it will be sent to the server
-      ...(process.env.NEXT_PUBLIC_ISSUER_TOKEN ? { "x-issuer-token": process.env.NEXT_PUBLIC_ISSUER_TOKEN } : {}),
+      ...(process.env.NEXT_PUBLIC_ISSUER_TOKEN
+        ? {
+            "x-issuer-token":
+              process.env.NEXT_PUBLIC_ISSUER_TOKEN,
+          }
+        : {}),
     },
     body: JSON.stringify({ age }),
   });
@@ -19,7 +25,10 @@ export async function issueCredential(age: number): Promise<AgeCredential> {
   }
 
   const data = await res.json();
-  if (!data.success || !data.credential) throw new Error("Invalid response from issuer");
+
+  if (!data.success || !data.credential) {
+    throw new Error("Invalid response from issuer");
+  }
 
   return data.credential as AgeCredential;
 }

@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 // Use plain anchors to avoid Link typing issues across Next versions
 import { loadCredential } from "../lib/wallet";
 
-const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:10000";
+const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL || "";
 
 type ProofResponse = {
   success: boolean;
