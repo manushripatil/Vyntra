@@ -6,10 +6,9 @@
   "rootMainFiles": [],
   "pages": {
     "/wallet": [
-      "static/chunks/3qngvicq-l362.js",
-      "static/chunks/381z0fn4y-jkt.js",
-      "static/chunks/2rusqjrrfv20j.js",
-      "static/chunks/turbopack-3vf7o7ws-cvku.js"
+      "static/chunks/3nd4reig32leu.js",
+      "static/chunks/1mq_pog84h4fe.js",
+      "static/chunks/turbopack-2-1llw4wcmxn-.js"
     ]
   },
   "ampFirstPages": []

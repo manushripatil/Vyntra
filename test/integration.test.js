@@ -1,7 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import http from 'node:http';
-import fetch from 'node-fetch';
 import app from '../server.js';
 
 test('integration: health and proof endpoints', async (t) => {

@@ -1,48 +1,42 @@
 globalThis.__BUILD_MANIFEST = {
   "pages": {
     "/": [
-      "static/chunks/1bsm57v0ui5i4.js",
-      "static/chunks/381z0fn4y-jkt.js",
-      "static/chunks/2rusqjrrfv20j.js",
-      "static/chunks/turbopack-35t-9je1d1zvo.js"
+      "static/chunks/2n-20eecj7xso.js",
+      "static/chunks/1mq_pog84h4fe.js",
+      "static/chunks/turbopack-3gpgvmaeg4ats.js"
     ],
     "/_app": [
-      "static/chunks/3wb188xrp43xc.js",
-      "static/chunks/381z0fn4y-jkt.js",
-      "static/chunks/2rusqjrrfv20j.js",
-      "static/chunks/turbopack-0d0wr9pve7wvt.js"
+      "static/chunks/2dt50aw8590rt.js",
+      "static/chunks/1mq_pog84h4fe.js",
+      "static/chunks/turbopack-2lnwlt7w8vfaf.js"
     ],
     "/_error": [
-      "static/chunks/3coxs7eenunvx.js",
-      "static/chunks/381z0fn4y-jkt.js",
-      "static/chunks/2rusqjrrfv20j.js",
-      "static/chunks/turbopack-1zgtss1ib4nfp.js"
+      "static/chunks/0k07n0z_fjcwi.js",
+      "static/chunks/1mq_pog84h4fe.js",
+      "static/chunks/turbopack-1z3ucl2odqth4.js"
     ],
     "/issuer": [
-      "static/chunks/3ra848c962ryv.js",
-      "static/chunks/381z0fn4y-jkt.js",
-      "static/chunks/2rusqjrrfv20j.js",
-      "static/chunks/turbopack-2h2odzgy3kevj.js"
+      "static/chunks/01c1tmp_g1err.js",
+      "static/chunks/1mq_pog84h4fe.js",
+      "static/chunks/turbopack-3oxwwjiw4-uty.js"
     ],
     "/verify": [
-      "static/chunks/2giqubbfvzri7.js",
-      "static/chunks/381z0fn4y-jkt.js",
-      "static/chunks/2rusqjrrfv20j.js",
-      "static/chunks/turbopack-3b1usqxymsv7n.js"
+      "static/chunks/3n_x6tkahs-uk.js",
+      "static/chunks/1mq_pog84h4fe.js",
+      "static/chunks/turbopack-2kpn6zet4jjku.js"
     ],
     "/wallet": [
-      "static/chunks/3qngvicq-l362.js",
-      "static/chunks/381z0fn4y-jkt.js",
-      "static/chunks/2rusqjrrfv20j.js",
-      "static/chunks/turbopack-3vf7o7ws-cvku.js"
+      "static/chunks/3nd4reig32leu.js",
+      "static/chunks/1mq_pog84h4fe.js",
+      "static/chunks/turbopack-2-1llw4wcmxn-.js"
     ]
   },
   "devFiles": [],
   "polyfillFiles": [],
   "lowPriorityFiles": [
-    "static/0sGDkA46vfkF5AiQDPt38/_buildManifest.js",
-    "static/0sGDkA46vfkF5AiQDPt38/_ssgManifest.js",
-    "static/0sGDkA46vfkF5AiQDPt38/_clientMiddlewareManifest.js"
+    "static/0lfOmQkVio2n3sFuNxYU_/_buildManifest.js",
+    "static/0lfOmQkVio2n3sFuNxYU_/_ssgManifest.js",
+    "static/0lfOmQkVio2n3sFuNxYU_/_clientMiddlewareManifest.js"
   ],
   "rootMainFiles": []
 };

@@ -8,6 +8,7 @@ build/
 
 # Next
 .next/
+.next/**/*
 
 # Artifacts
 *.zkey

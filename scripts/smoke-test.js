@@ -1,5 +1,4 @@
 const base = process.env.BASE_URL || 'http://localhost:10000';
-const fetch = globalThis.fetch || (url => import('node-fetch').then(m => m.default(url)));
 
 async function run() {
   try {
