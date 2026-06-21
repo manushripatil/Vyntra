@@ -16,19 +16,24 @@ const __dirname = path.dirname(__filename);
 const app = express();
 
 // CORS: allow only configured origin (useful in prod/dev)
-const ALLOWED_ORIGIN = process.env.ALLOWED_ORIGIN || "http://localhost:3000";
+const ALLOWED_ORIGIN = process.env.ALLOWED_ORIGIN || "";
 const isDev = process.env.NODE_ENV !== "production";
 
 app.use(
   cors({
     origin: (origin, callback) => {
+      console.log("Request origin:", origin);
+      console.log("Allowed origin:", ALLOWED_ORIGIN);
+
       // Allow requests with no origin like curl/postman
       if (!origin) return callback(null, true);
       // In development, allow any localhost origin
       if (isDev && origin.startsWith("http://localhost:")) return callback(null, true);
       if (isDev && origin.startsWith("http://127.0.0.1:")) return callback(null, true);
-      // In production, check against ALLOWED_ORIGIN
+      // In production, allow the configured origin only
       if (origin === ALLOWED_ORIGIN) return callback(null, true);
+
+      console.warn("Rejected CORS origin:", origin);
       return callback(new Error("CORS_NOT_ALLOWED"));
     },
   })

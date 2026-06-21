@@ -16,8 +16,8 @@ async function start() {
   // Mount your existing API server
   app.use(apiApp);
 
-  // Let Next.js handle all pages
-  app.all("/{*splat}", (req, res) => {
+  // Let Next.js handle all remaining routes
+  app.all("*", (req, res) => {
     return handle(req, res);
   });
 
