@@ -17,11 +17,17 @@ const app = express();
 
 // CORS: allow only configured origin (useful in prod/dev)
 const ALLOWED_ORIGIN = process.env.ALLOWED_ORIGIN || "http://localhost:3000";
+const isDev = process.env.NODE_ENV !== "production";
+
 app.use(
   cors({
     origin: (origin, callback) => {
       // Allow requests with no origin like curl/postman
       if (!origin) return callback(null, true);
+      // In development, allow any localhost origin
+      if (isDev && origin.startsWith("http://localhost:")) return callback(null, true);
+      if (isDev && origin.startsWith("http://127.0.0.1:")) return callback(null, true);
+      // In production, check against ALLOWED_ORIGIN
       if (origin === ALLOWED_ORIGIN) return callback(null, true);
       return callback(new Error("CORS_NOT_ALLOWED"));
     },
