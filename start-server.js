@@ -13,11 +13,11 @@ async function start() {
 
   const app = express();
 
-  // Mount your existing API server
+  // API routes first
   app.use(apiApp);
 
-  // Let Next.js handle all remaining routes
-  app.all("*", (req, res) => {
+  // Next.js pages fallback (FIXED FOR EXPRESS 5)
+  app.all(/.*/, (req, res) => {
     return handle(req, res);
   });
 
